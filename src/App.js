@@ -1,25 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
+const App = () => {
+  const [isExpand, setIsExpand] = useState({})
+  const menuConfig = [
+    {
+      title: 'Home'
+    },
+    {
+      title: 'Services',
+      subItems: ['Cooking', 'Cleaning']
+    },
+    {
+      title: 'Contact',
+      subItems: ['Phone', 'Mail']
+    }
+  ]
+
+  const renderObj = (menu) => {
+    if (menu.subItems) {
+      return (
+        <>
+          <button
+            onClick={() => {
+              setIsExpand({
+                ...isExpand,
+                [menu.title]: !isExpand?.[menu.title]
+              })
+            }}
+          >
+            {!isExpand?.[menu.title] ? 'Hide' : 'Expand'}
+          </button>
+          {
+            !isExpand?.[menu.title] ? (
+              <ul key={menu.title}>
+                {menu.subItems.map((subitem) => {
+                  return <li key={subitem}>{subitem}</li>
+                })}
+              </ul>
+            ) : null
+          }
+        </>
+      )
+    } else return null;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="menu-wrapper">
+      {menuConfig.map((menu) => {
+        return (
+          <div key={menu.title}>
+            <span>{menu.title}</span>
+            {renderObj(menu)}
+          </div>
+        )
+      })
+      }
     </div>
-  );
+  )
 }
 
 export default App;
